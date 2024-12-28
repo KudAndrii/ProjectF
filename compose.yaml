@@ -1,0 +1,6 @@
+﻿services:
+  projectf.api:
+    image: projectf.api
+    build:
+      context: .
+      dockerfile: ProjectF.Api/Dockerfile
