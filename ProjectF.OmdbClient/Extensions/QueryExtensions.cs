@@ -42,7 +42,11 @@ public static class QueryExtensions
         var query = HttpUtility.ParseQueryString(uriBuilder.Query);
         var properties = @params.GetType()
             .GetProperties()
-            .Where(prop => prop.PropertyType.IsPrimitive || prop.PropertyType == typeof(string));
+            .Where(prop => 
+                prop.PropertyType.IsPrimitive || 
+                prop.PropertyType == typeof(string) ||
+                (prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>) && 
+                 Nullable.GetUnderlyingType(prop.PropertyType)!.IsPrimitive));
         
         foreach (var property in properties)
         {

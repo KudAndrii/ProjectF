@@ -13,7 +13,7 @@ public class SearchController(OmdbClient.Services.OmdbClient omdbClient) : BaseC
         [FromQuery] string term, [FromQuery] int? year, [FromQuery] int page = 1,
         CancellationToken cancellationToken = default)
     {
-        var result = await omdbClient.Search(new SearchQueryModel
+        var result = await omdbClient.SearchAsync(new SearchQueryModel
         {
             Term = term,
             Year = year,

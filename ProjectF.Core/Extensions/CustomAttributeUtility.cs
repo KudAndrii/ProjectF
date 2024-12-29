@@ -1,10 +1,18 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace ProjectF.Core.Extensions;
 
 public static class CustomAttributeUtility
 {
+    /// <summary>
+    /// Method gets json name of the property provided by <paramref name="func"/>.
+    /// </summary>
+    /// <seealso cref="GetAttributeValue{TAttribute, TModel}"/>
+    public static string? GetJsonName<TModel>(Expression<Func<TModel, object?>> func) =>
+        GetAttributeValue<JsonPropertyNameAttribute, TModel>(attr => attr.Name, func);
+
     /// <summary>
     /// Method defines attribute property by <paramref name="attrFunc"/>
     /// from which result-value should be taken.<br/>
@@ -17,7 +25,7 @@ public static class CustomAttributeUtility
         where TAttribute : Attribute
     {
         // Resolve the model property info
-        if (modelFunc.Body is not MemberExpression modelMember)
+        if (GetMemberExpression(modelFunc.Body) is not { Member: PropertyInfo } modelMember)
         {
             throw new ArgumentException("The argument must point to a member.", nameof(modelFunc));
         }
@@ -45,8 +53,7 @@ public static class CustomAttributeUtility
             throw new ArgumentException("The attrFunc must point to a member.", nameof(attrFunc));
         }
 
-        var attrPropertyInfo = attrMember.Member as PropertyInfo;
-        if (attrPropertyInfo == null)
+        if (attrMember.Member is not PropertyInfo attrPropertyInfo)
         {
             throw new ArgumentException("The attrFunc must point to a property.", nameof(attrFunc));
         }
@@ -55,5 +62,17 @@ public static class CustomAttributeUtility
         var value = attrPropertyInfo.GetValue(attribute);
 
         return value?.ToString();
+    }
+    
+    
+
+    private static MemberExpression? GetMemberExpression(Expression expression)
+    {
+        return expression switch
+        {
+            MemberExpression memberExpression => memberExpression,
+            UnaryExpression { Operand: MemberExpression operand } => operand,
+            _ => null
+        };
     }
 }
