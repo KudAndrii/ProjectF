@@ -14,10 +14,10 @@ public static class WebRegistrations
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
         });
-        
+
         return services;
     }
-    
+
     public static IServiceCollection WithExceptionHandlers(this IServiceCollection services) => services
         .AddExceptionHandler<GlobalExceptionHandler>()
         .AddProblemDetails(options =>
@@ -30,6 +30,20 @@ public static class WebRegistrations
                 context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
             };
         });
+
+    public static IServiceCollection WithHybridCache(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("DistributedCache");
+        });
+        
+#pragma warning disable EXTEXP0018
+        services.AddHybridCache();
+#pragma warning restore EXTEXP0018
+        
+        return services;
+    }
 
     public static ApiVersionSet UseVersioning(this WebApplication app) => app
         .NewApiVersionSet()

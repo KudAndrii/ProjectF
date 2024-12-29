@@ -1,7 +1,9 @@
 using System.Diagnostics;
+using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProjectF.Core.Extensions;
+using ProjectF.OmdbClient.Exceptions;
 
 namespace ProjectF.Api.GlobalHandlers;
 
@@ -18,12 +20,28 @@ public class GlobalExceptionHandler(
 
         var problemDetails = exception switch
         {
-            NotImplementedException notImplementedException => new ProblemDetails
+            NotImplementedException => new ProblemDetails
             {
                 Type = nameof(StatusCodes.Status500InternalServerError),
                 Status = StatusCodes.Status500InternalServerError,
                 Title = nameof(NotImplementedException),
-                Detail = notImplementedException.Message.IfNullOrEmpty("Not yet implemented")
+                Detail = exception.Message.IfNullOrEmpty("Not yet implemented")
+            },
+            
+            OmdbRequestException { StatusCode: HttpStatusCode.RequestTimeout } => new ProblemDetails
+            {
+                Type = nameof(StatusCodes.Status504GatewayTimeout),
+                Status = StatusCodes.Status504GatewayTimeout,
+                Title = nameof(OmdbRequestException),
+                Detail = exception.Message
+            },
+            
+            OmdbRequestException => new ProblemDetails
+            {
+                Type = nameof(StatusCodes.Status502BadGateway),
+                Status = StatusCodes.Status502BadGateway,
+                Title = nameof(OmdbRequestException),
+                Detail = exception.Message
             },
 
             _ => new ProblemDetails
