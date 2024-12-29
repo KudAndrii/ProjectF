@@ -1,5 +1,6 @@
 using ProjectF.Api.Configurations;
 using ProjectF.Api.Middlewares;
+using ProjectF.Cache;
 using ProjectF.OmdbClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services
     .WithApiVersioning()
     .WithExceptionHandlers()
-    .WithHybridCache(builder.Configuration)
+    .WithCaching(builder.Configuration)
     .WithOmdbClientServices();
 
 var app = builder.Build();

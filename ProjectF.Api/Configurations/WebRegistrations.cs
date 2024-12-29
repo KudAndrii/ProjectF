@@ -31,20 +31,6 @@ public static class WebRegistrations
             };
         });
 
-    public static IServiceCollection WithHybridCache(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString("DistributedCache");
-        });
-        
-#pragma warning disable EXTEXP0018
-        services.AddHybridCache();
-#pragma warning restore EXTEXP0018
-        
-        return services;
-    }
-
     public static ApiVersionSet UseVersioning(this WebApplication app) => app
         .NewApiVersionSet()
         .HasApiVersion(ApiVersions.V09)

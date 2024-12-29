@@ -10,6 +10,7 @@ public static class OmdbClientRegistrations
     public static IServiceCollection WithOmdbClientServices(this IServiceCollection services)
     {
         services.AddOptions<OmdbConfiguration>().BindConfiguration(nameof(OmdbConfiguration)).ValidateOnStart();
+        services.AddTransient<CacheHandler>();
         services.AddTransient<AuthHandler>();
         services.AddTransient<ExceptionHandler>();
         services.AddHttpClient<Services.OmdbClient>((scope, client) =>
@@ -18,6 +19,7 @@ public static class OmdbClientRegistrations
 
                 client.BaseAddress = omdbConfig.BaseAddress;
             })
+            .AddHttpMessageHandler<CacheHandler>()
             .AddHttpMessageHandler<AuthHandler>()
             .AddHttpMessageHandler<ExceptionHandler>();
 

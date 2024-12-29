@@ -9,12 +9,14 @@ namespace ProjectF.Api.Controllers;
 public class SearchController(OmdbClient.Services.OmdbClient omdbClient) : BaseController
 {
     [HttpGet]
-    public async Task<IResult> Search([FromQuery] string? term, [FromQuery] int page,
-        CancellationToken cancellationToken)
+    public async Task<IResult> Search(
+        [FromQuery] string term, [FromQuery] int? year, [FromQuery] int page = 1,
+        CancellationToken cancellationToken = default)
     {
         var result = await omdbClient.Search(new SearchQueryModel
         {
             Term = term,
+            Year = year,
             Page = page
         }, cancellationToken);
 
