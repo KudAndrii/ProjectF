@@ -1,6 +1,12 @@
 ﻿services:
-  projectf.api:
-    image: projectf.api
+  project-f.api:
+    image: project-f.api
     build:
       context: .
       dockerfile: ProjectF.Api/Dockerfile
+    environment:
+      ConnectionStrings__ProjectF: ${CONNECTION_STRING_PROJECT_F}
+      ConnectionStrings__DistributedCache: ${CONNECTION_STRING_DISTRIBUTED_CACHE}
+    ports:
+      - "8080:8080"
+      - "8081:8081"
