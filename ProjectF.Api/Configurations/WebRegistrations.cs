@@ -18,6 +18,15 @@ public static class WebRegistrations
         return services;
     }
 
+    public static IServiceCollection WithHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("ProjectF")!)
+            .AddRedis(configuration.GetConnectionString("DistributedCache")!);
+        
+        return services;
+    }
+
     public static IServiceCollection WithExceptionHandlers(this IServiceCollection services) => services
         .AddExceptionHandler<GlobalExceptionHandler>()
         .AddProblemDetails(options =>

@@ -16,11 +16,15 @@
 
     <ItemGroup>
       <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
+      <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ProjectF.Core\ProjectF.Core.csproj" />
+      <ProjectReference Include="..\ProjectF.DataAccess\ProjectF.DataAccess.csproj" />
       <ProjectReference Include="..\ProjectF.OmdbClient\ProjectF.OmdbClient.csproj" />
     </ItemGroup>
 
