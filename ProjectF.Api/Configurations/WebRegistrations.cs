@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Asp.Versioning.Builder;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ProjectF.Api.GlobalHandlers;
 
 namespace ProjectF.Api.Configurations;
@@ -22,7 +23,8 @@ public static class WebRegistrations
     {
         services.AddHealthChecks()
             .AddSqlServer(configuration.GetConnectionString("ProjectF")!)
-            .AddRedis(configuration.GetConnectionString("DistributedCache")!);
+            .AddRedis(configuration.GetConnectionString("DistributedCache")!, failureStatus: HealthStatus.Degraded)
+            .AddCheck<OmdbHealthCheck>("Omdb");
         
         return services;
     }
