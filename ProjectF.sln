@@ -5,6 +5,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A59A5FA9-2BBE-4033-B7FA-AAF2DBC3BAA0}"
 	ProjectSection(SolutionItems) = preProject
 		compose.yaml = compose.yaml
+		start_docker.sh = start_docker.sh
+		.gitignore = .gitignore
+		.env = .env
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectF.Core", "ProjectF.Core\ProjectF.Core.csproj", "{7BF64D53-8834-42F7-BBF8-C5707FB2B3C4}"

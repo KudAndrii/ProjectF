@@ -1,12 +1,22 @@
 ﻿services:
   project-f.api:
     image: project-f.api
+    container_name: project-f-api
     build:
       context: .
       dockerfile: ProjectF.Api/Dockerfile
     environment:
       ConnectionStrings__ProjectF: ${CONNECTION_STRING_PROJECT_F}
-      ConnectionStrings__DistributedCache: ${CONNECTION_STRING_DISTRIBUTED_CACHE}
+      ConnectionStrings__DistributedCache: "redis://redis"
+      OmdbConfiguration__ApiKey: ${OMDB_API_KEY}
     ports:
       - "8080:8080"
       - "8081:8081"
+    depends_on:
+      - redis  # Ensure the API starts after Redis is available
+
+  redis:
+    image: redis
+    container_name: project-f-redis
+    ports:
+      - "6379:6379"
