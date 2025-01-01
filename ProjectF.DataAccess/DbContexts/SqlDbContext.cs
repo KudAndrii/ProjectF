@@ -5,7 +5,7 @@ namespace ProjectF.DataAccess.DbContexts;
 
 public class SqlDbContext(DbContextOptions<SqlDbContext> options) : DbContext(options)
 {
-    public DbSet<MoviesQueryEntity> Users { get; set; }
+    public DbSet<MoviesQueryEntity> MoviesQueries { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

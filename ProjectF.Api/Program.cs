@@ -4,6 +4,7 @@ using ProjectF.Api.Configurations;
 using ProjectF.Api.Middlewares;
 using ProjectF.Cache;
 using ProjectF.DataAccess;
+using ProjectF.Handlers;
 using ProjectF.OmdbClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,10 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services
     .WithDataAccessServices(builder.Configuration)
-    .WithApiVersioning()
-    .WithExceptionHandlers()
     .WithCaching(builder.Configuration)
     .WithOmdbClientServices()
+    .WithMediator()
+    .WithHandlersServices()
+    .WithExceptionHandlers()
+    .WithApiVersioning()
     .WithHealthChecks(builder.Configuration);
 
 var app = builder.Build();

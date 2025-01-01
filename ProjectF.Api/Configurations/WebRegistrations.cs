@@ -11,7 +11,7 @@ public static class WebRegistrations
     {
         services.AddApiVersioning(options =>
         {
-            options.DefaultApiVersion = ApiVersions.V1;
+            options.DefaultApiVersion = ApiVersions.V09;
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
         });
@@ -41,13 +41,13 @@ public static class WebRegistrations
                 context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
             };
         });
+    
+    public static IServiceCollection WithMediator(this IServiceCollection services) => services
+        .AddMediatR(mr => mr.RegisterServicesFromAssemblyContaining<Program>());
 
     public static ApiVersionSet UseVersioning(this WebApplication app) => app
         .NewApiVersionSet()
         .HasApiVersion(ApiVersions.V09)
-        .HasApiVersion(ApiVersions.V1)
-        .HasApiVersion(ApiVersions.V2)
-        .HasDeprecatedApiVersion(ApiVersions.V09)
         .ReportApiVersions()
         .Build();
 }
