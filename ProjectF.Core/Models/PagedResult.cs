@@ -2,15 +2,18 @@ namespace ProjectF.Core.Models;
 
 public class PagedResult<T>
 {
-    public PagedResult(long totalItems, long pageNumber, long pageSize)
+    public PagedResult(ICollection<T> allItems, long pageNumber, int pageSize)
     {
-        TotalItems = totalItems;
         PageNumber = pageNumber;
         PageSize = pageSize;
+        
+        var (skip, take) = GetSkipTake(PageNumber, PageSize);
+        TotalItems = allItems.Count;
+        Items = allItems.Skip(skip).Take(take).ToList();
 
-        if (pageSize > 0)
+        if (PageSize > 0)
         {
-            TotalPages = (long)Math.Ceiling(totalItems / (decimal)pageSize);
+            TotalPages = (long)Math.Ceiling(TotalItems / (decimal)PageSize);
         }
         else
         {
@@ -18,25 +21,25 @@ public class PagedResult<T>
         }
     }
 
-    public long PageNumber { get; private set; }
-    public long PageSize { get; private set; }
-    public long TotalPages { get; private set; }
-    public long TotalItems { get; private set; }
-    public IEnumerable<T>? Items { get; set; }
+    public long PageNumber { get; }
+    public int PageSize { get; }
+    public long TotalPages { get; }
+    public long TotalItems { get; }
+    public ICollection<T>? Items { get; }
 
     /// <summary>
-    ///     Calculates the skip size based on the paged parameters specified
+    /// Calculates the skip size based on the paged parameters specified
     /// </summary>
     /// <remarks>
-    ///     Returns 0 if the page number or page size is zero
+    /// Returns 0 if the page number or page size is zero
     /// </remarks>
-    public int GetSkipSize()
+    private static (int Skip, int Take) GetSkipTake(long pageNumber, int pageSize)
     {
-        if (PageNumber > 0 && PageSize > 0)
+        if (pageNumber > 0 && pageSize > 0)
         {
-            return Convert.ToInt32((PageNumber - 1) * PageSize);
+            return (Convert.ToInt32((pageNumber - 1) * pageSize), pageSize);
         }
 
-        return 0;
+        return (0, pageSize);
     }
 }

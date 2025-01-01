@@ -4,8 +4,10 @@ using System.Runtime.CompilerServices;
 
 namespace ProjectF.OmdbClient.Exceptions;
 
-public class OmdbRequestException(string? message, Exception? inner, HttpStatusCode? statusCode)
-    : HttpRequestException(message, inner, statusCode)
+public class OmdbRequestException(
+    string? message,
+    Exception? inner = null,
+    HttpStatusCode? statusCode = HttpStatusCode.BadRequest) : HttpRequestException(message, inner, statusCode)
 {
     public static OmdbRequestException From(HttpRequestException exception) =>
         new(exception.Message, exception.InnerException, exception.StatusCode);

@@ -4,4 +4,5 @@ using ProjectF.OmdbClient.Models.Responses;
 
 namespace ProjectF.Handlers.Queries;
 
-public record SearchMoviesQuery(string Term, int? Year, int Page) : IRequest<PagedResult<SearchItemResponseModel>>;
+public record SearchMoviesQuery(string Term, int? Year, int PageNumber, int PageSize)
+    : IRequest<PagedResult<SearchItemResponseModel>>;
